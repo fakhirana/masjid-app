@@ -4,26 +4,37 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-return new class extends Migration
-{
+return new class extends Migration {
     public function up(): void
     {
         Schema::table('events', function (Blueprint $table) {
-            // 1. Menghapus kolom is_active
-            $table->dropColumn('is_active');
+            // tambah kolom
+            $table->foreignId('user_id')
+                    ->after('id')
+                    // ->constrained('users')
+                    ->nullable()
+                    ->cascadeOnDelete();
 
-            // 2. Menambahkan kolom baru
-            $table->foreignId('user_id')->constrained('users')->onDelete('cascade'); // Untuk relasi ke pembuat/penanggung jawab
-            $table->string('status')->default('active'); // active / inactive
-            $table->timestamp('joined_at')->nullable(); // Tanggal mulai pakai
+            $table->enum('status', ['active', 'inactive'])
+                    ->default('active')
+                    ->after('description');
+
+            $table->unsignedInteger('joined')
+                    ->default(0)
+                    ->after('status');
+
+            // hapus kolom lama
+            $table->dropColumn('is_active');
         });
     }
 
     public function down(): void
     {
         Schema::table('events', function (Blueprint $table) {
-            $table->integer('is_active')->default(1);
-            $table->dropColumn(['user_id', 'status', 'joined_at']);
+            $table->boolean('is_active')->default(true);
+
+            $table->dropForeign(['user_id']);
+            $table->dropColumn(['user_id', 'status', 'joined']);
         });
     }
 };

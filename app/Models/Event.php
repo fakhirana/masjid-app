@@ -18,7 +18,8 @@ class Event extends Model
         'description', 
         'user_id',   // baru
         'status',    // baru
-        'joined_at'  // baru
+        'joined_at',  // baru
+        'created_by'
     ];
 
     public function registrations()

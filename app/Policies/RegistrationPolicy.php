@@ -25,6 +25,11 @@ class RegistrationPolicy
         return $user->role === 'pengurus';
     }
 
+    public function viewAttendance(User $user): bool
+    {
+        return $user->role === 'pengurus';
+    }
+
     /**
      * Menghapus konfirmasi
      */

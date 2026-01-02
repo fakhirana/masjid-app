@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Event;
+use App\Models\Registration;
 use Illuminate\Http\Request;
 use App\Traits\ApiResponse;
 use Illuminate\Support\Facades\Auth;
@@ -12,6 +13,31 @@ class EventController extends Controller
 {
     use ApiResponse, AuthorizesRequests;
 
+    public function attendances(Event $event)
+    {
+        $this->authorize('viewAttendance', Registration::class);
+
+        $data = $event->registrations()
+            ->with('user:id,name,email,role')
+            ->get()
+            ->map(function ($reg) {
+                return [
+                    'name'       => $reg->user->name,
+                    // 'email'      => $reg->user->email,
+                    'role'       => $reg->user->role,
+                    'confirmed_at' => $reg->created_at,
+                ];
+            });
+
+        return response()->json([
+            'event' => [
+                'id' => $event->id,
+                'name' => $event->name,
+            ],
+            'total_attendance' => $data->count(),
+            'attendances' => $data,
+        ]);
+    }
     /**
      * Menampilkan daftar kegiatan yang aktif.
      */
