@@ -11,26 +11,28 @@ class AuthController extends Controller
 {
     use ApiResponse;
 
+    /**
+     * Registrasi akun (default role: tamu)
+     */
     public function register(Request $request)
     {
         $validated = $request->validate([
-            'name'     => 'required|string|max:255',
-            'email'    => 'required|string|email|unique:users',
-            'password' => 'required|string|min:8',
+            'name'                  => 'required|string|max:255',
+            'username'              => 'required|string|max:50|unique:users,username',
+            'password'              => 'required|string|min:8|confirmed',
         ]);
 
         $user = User::create([
             'name'     => $validated['name'],
-            'email'    => $validated['email'],
+            'username' => $validated['username'],
             'password' => Hash::make($validated['password']),
-            'role'     => 'warga', // Otomatis jadi warga saat daftar
+            'role'     => 'tamu',
         ]);
 
-        $token = $user->createToken('auth_token')->plainTextToken;
-
-        return $this->successResponse([
-            'user'  => $user,
-            'token' => $token
-        ], 'Registration Account Successful', 201);
+        return $this->successResponse(
+            $user,
+            'Registrasi berhasil. Silakan ajukan verifikasi warga.',
+            201
+        );
     }
 }

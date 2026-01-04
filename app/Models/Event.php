@@ -5,6 +5,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
+
 class Event extends Model
 {
     use HasFactory;
@@ -24,7 +25,7 @@ class Event extends Model
 
     public function registrations()
     {
-        return $this->hasMany(Registration::class);
+        return $this->hasMany(Attendance::class);
     }
 
     public function creator()

@@ -5,16 +5,16 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class Registration extends Model
+class Attendance extends Model
 {
     use HasFactory;
 
-    protected $table = 'registrations';
+    protected $table = 'registrations'; 
+    // ⬆️ tabel belum kita rename, tapi secara konsep ini attendance
 
     protected $fillable = [
         'event_id',
         'user_id',
-        'status'
     ];
 
     public function event()

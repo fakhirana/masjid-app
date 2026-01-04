@@ -21,6 +21,7 @@ class User extends Authenticatable
      */
     protected $fillable = [
         'name',
+        'username',
         'email',
         'password',
         'role', // Pastikan 'role' ada di sini agar bisa disimpan
@@ -33,7 +34,6 @@ class User extends Authenticatable
      */
     protected $hidden = [
         'password',
-        'remember_token',
     ];
 
     /**
@@ -74,4 +74,10 @@ class User extends Authenticatable
     {
         return $this->hasMany(ZakatReport::class, 'created_by');
     }
+
+    public function wargaVerification()
+    {
+        return $this->hasOne(WargaVerification::class);
+    }
+
 }

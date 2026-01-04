@@ -3,20 +3,20 @@
 namespace App\Http\Controllers;
 
 use App\Models\Event;
-use App\Models\Registration;
+use App\Models\Attendance;
 use Illuminate\Http\Request;
 use App\Traits\ApiResponse;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
 
-class RegistrationController extends Controller
+class AttendanceController extends Controller
 {
     use ApiResponse, AuthorizesRequests;
 
     /**
      * Konfirmasi kehadiran event
      */
-    public function confirmPresence(Request $request)
+    public function confirm(Request $request)
     {
         $validated = $request->validate([
             'event_id' => 'required|exists:events,id',
@@ -24,11 +24,11 @@ class RegistrationController extends Controller
 
         $event = Event::findOrFail($validated['event_id']);
 
-        // 🔐 Policy check (INI KUNCI)
-        $this->authorize('create', [Registration::class, $event]);
+        // 🔐 Policy check
+        $this->authorize('create', [Attendance::class, $event]);
 
         // Cegah double konfirmasi
-        $exists = Registration::where('user_id', Auth::id())
+        $exists = Attendance::where('user_id', Auth::id())
             ->where('event_id', $event->id)
             ->exists();
 
@@ -39,13 +39,13 @@ class RegistrationController extends Controller
             );
         }
 
-        $registration = Registration::create([
+        $attendance = Attendance::create([
             'user_id'  => Auth::id(),
             'event_id' => $event->id,
         ]);
 
         return $this->successResponse(
-            $registration,
+            $attendance,
             'Konfirmasi kehadiran berhasil!',
             201
         );
