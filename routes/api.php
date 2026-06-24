@@ -22,6 +22,7 @@ use App\Http\Controllers\InvitationCodeController;
 |--------------------------------------------------------------------------
 */
 Route::post('register', [AuthController::class, 'register']);
+Route::post('login', [AuthController::class, 'login']);
 
 /*
 |--------------------------------------------------------------------------
@@ -62,7 +63,7 @@ Route::middleware(['auth:sanctum', 'dev_auth'])->group(function () {
         Route::post('events/confirm', [AttendanceController::class, 'confirm']);
         Route::get('events', [EventController::class, 'index']);
         Route::get('events/{event}', [EventController::class, 'show']);
-        Route::post('login', [AuthController::class, 'login']);
+        // Route::post('login', [AuthController::class, 'login']);
 
     });
 

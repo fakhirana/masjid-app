@@ -85,7 +85,7 @@ class DashboardController extends Controller
                 // === TAMBAHAN KHUSUS RAMADHAN ===
                 if ($isRamadhan) {
                     $jadwalSholat['imsak']      = $timings['Imsak']   ?? '-';
-                    $jadwalSholat['sahur']      = $timings['Fajr']    ?? '-';
+                    // $jadwalSholat['sahur']      = $timings['Imsak']    ?? '-';
                     $jadwalSholat['buka_puasa'] = $timings['Maghrib'] ?? '-';
                 }
 
